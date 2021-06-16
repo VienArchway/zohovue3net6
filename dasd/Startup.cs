@@ -5,7 +5,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.AspNetCore.SpaServices;
-using VueCliMiddleware;
+// using VueCliMiddleware;
 
 namespace dasd
 {
@@ -59,7 +59,7 @@ namespace dasd
                     pattern: "{controller}/{action=Index}/{id?}");
                 
                 // USING with SpaProxy
-                // endpoints.MapFallbackToFile("index.html");
+                endpoints.MapFallbackToFile("index.html");
             });
             app.UseSpa(spa =>
             {
@@ -67,7 +67,8 @@ namespace dasd
 
                 if (env.IsDevelopment())
                 {
-                    spa.UseVueCli(npmScript: "serve", port: 5001);
+                    spa.UseProxyToSpaDevelopmentServer("http://localhost:5000");
+                    // spa.UseVueCli(npmScript: "serve", port: 5001);
                 }
             });
         }
