@@ -67,7 +67,7 @@ namespace dasd
 
                 if (env.IsDevelopment())
                 {
-                    spa.UseProxyToSpaDevelopmentServer("http://localhost:5000");
+                    spa.UseProxyToSpaDevelopmentServer("http://localhost:8080");
                     // spa.UseVueCli(npmScript: "serve", port: 5001);
                 }
             });
