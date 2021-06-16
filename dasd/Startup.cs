@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.AspNetCore.SpaServices;
+using VueCliMiddleware;
 
 namespace dasd
 {
@@ -21,6 +23,11 @@ namespace dasd
         {
 
             services.AddControllersWithViews();
+            // In production, the Vue files will be served from this directory
+            services.AddSpaStaticFiles(configuration =>
+            {
+                configuration.RootPath = "ClientApp/dist";
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -39,6 +46,10 @@ namespace dasd
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
+            if (!env.IsDevelopment())
+            {
+                app.UseSpaStaticFiles();
+            }
             app.UseRouting();
 
             app.UseEndpoints(endpoints =>
@@ -46,8 +57,18 @@ namespace dasd
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller}/{action=Index}/{id?}");
+                
+                // USING with SpaProxy
+                // endpoints.MapFallbackToFile("index.html");
+            });
+            app.UseSpa(spa =>
+            {
+                spa.Options.SourcePath = "ClientApp";
 
-                endpoints.MapFallbackToFile("index.html");
+                if (env.IsDevelopment())
+                {
+                    spa.UseVueCli(npmScript: "serve", port: 5001);
+                }
             });
         }
     }
